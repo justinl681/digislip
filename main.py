@@ -39,6 +39,9 @@ class App(customtkinter.CTk):
         self.airports = requests.get("https://justin681.com/digislip/airports.txt").text.split("\n")
         self.airports.sort()
 
+        self.aircraft_list = requests.get("https://justin681.com/digislip/aircraft.txt").text.split("\n")
+        self.aircraft_list.sort()
+
         self.geometry(f"{self.width}x{self.height}") # Set the size of the window
         self.title("DigiSlip") # Set the title of the window
         self.attributes('-topmost', True) # Set the window to be on top of all other windows, even when not focused, useful when quickly switching between windows
@@ -64,7 +67,7 @@ class App(customtkinter.CTk):
 
     def add_flight(self):   
 
-        flight = Flight(self.flights_frame, self.airlines, self.stages) # Create a flight
+        flight = Flight(self.flights_frame, self.airlines, self.stages, self.aircraft_list) # Create a flight
         flight.pack() # Pack the flight into the scrollable frame
         self.flights.append(flight) # Add the flight to the list of flights
 
@@ -91,7 +94,7 @@ class App(customtkinter.CTk):
     
 class Flight(customtkinter.CTkFrame):
 
-    def __init__(self, master, airlines, stages, airline=None, flight_number=None, flight_stage=None, flight_stage_info=None):
+    def __init__(self, master, airlines, stages, aircraft_list, airline=None, aircraft=None, flight_number=None, flight_stage=None, flight_stage_info=None):
 
         super().__init__(master) # Initialise the frame
 
@@ -101,7 +104,7 @@ class Flight(customtkinter.CTkFrame):
         self.grid_columnconfigure(3, weight=1) # Make the fourth column expand to fill the frame
         self.grid_columnconfigure(4, weight=1) # Make the fifth column expand to fill the frame
 
-        self.airline = customtkinter.CTkOptionMenu(self, width=200, values=airlines) # Create an option menu
+        self.airline = customtkinter.CTkOptionMenu(self, width=140, values=airlines) # Create an option menu
 
         if airline != None: # If the airline is not None
 
@@ -116,6 +119,14 @@ class Flight(customtkinter.CTkFrame):
             self.flight_number.insert(0, flight_number) # Set the flight number to the flight number passed to the function
             
         self.flight_number.grid(row=0, column=1, padx=5, pady=5) # Place the flight number entry on the frame
+
+        self.aircraft = customtkinter.CTkOptionMenu(self, width=200, values=aircraft_list) # Create an entry box
+        
+        if aircraft != None: # If the aircraft is not None
+
+            self.aircraft.set(aircraft) # Set the aircraft to the aircraft passed to the function
+        
+        self.aircraft.grid(row=0, column=2, padx=5, pady=5) # Place the aircraft entry on the frame
  
         self.flight_stage = customtkinter.CTkOptionMenu(self, width=100, values=stages) # Create an option menu
 
@@ -123,7 +134,7 @@ class Flight(customtkinter.CTkFrame):
 
             self.flight_stage.set(flight_stage) # Set the flight stage to the flight stage passed to the function
             
-        self.flight_stage.grid(row=0, column=2, padx=5, pady=5) # Place the flight stage option menu on the frame
+        self.flight_stage.grid(row=0, column=3, padx=5, pady=5) # Place the flight stage option menu on the frame
 
         self.flight_stage_info = customtkinter.CTkEntry(self, width=100) # Create an entry box
 
@@ -131,7 +142,7 @@ class Flight(customtkinter.CTkFrame):
 
             self.flight_stage_info.insert(0, flight_stage_info) # Set the flight stage info to the flight stage info passed to the function
 
-        self.flight_stage_info.grid(row=0, column=3, padx=5, pady=5) # Place the flight stage info entry on the frame
+        self.flight_stage_info.grid(row=0, column=4, padx=5, pady=5) # Place the flight stage info entry on the frame
 
         self.delete_button = customtkinter.CTkButton(self, text="Delete Flight", command=self.delete, hover_color="#a64949") # Create a button
         self.delete_button.grid(row=0, column=6, padx=5, pady=5) # Place the delete button on the frame
