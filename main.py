@@ -1,6 +1,7 @@
 import tkinter
 import customtkinter
 import webbrowser
+import requests
 
 """
 DigiSlip
@@ -20,57 +21,7 @@ class App(customtkinter.CTk):
 
         self.pinned = True # Set the window to be pinned by default
 
-        self.airlines = """Canadian
-AirBalistic
-AirFrans
-Belta
-Bliss
-JetBloo
-KoreenAir
-Oantas
-Aer Dingus
-Americano
-Speedbird
-Doncor
-HardJet
-Lifthansa
-Oatar
-Old Zealand
-Scandialien
-Spirit
-Thay
-Turkish
-United
-Wizz Air
-Cafe Pacific
-Emarates
-Jet3
-KLN
-Singadoor
-Byanair
-KOT
-Northeast
-Tui
-Flybe
-Pepsi
-Havoc
-Quake
-Gyro
-Warlock
-Lancer
-Xenon
-Cobra
-Uplift
-Raider
-Worldstar
-Jester
-Kestral
-TomJet
-Supertransport
-UPS
-DHL
-FedEx
-Python""".split("\n")
+        self.airlines = requests.get("https://justin681.com/digislip/callsigns.txt").text.split("\n")
         self.airlines.sort() # Create a list of airlines
 
         self.stages = [
@@ -85,29 +36,7 @@ Python""".split("\n")
             "Landing",
         ] # Create a list of flight stages
 
-        self.airports = [
-            "IBAR",
-            "IHEN",
-            "ILAR",
-            "IPAP",
-            "IGRV",
-            "IJAF",
-            "IZOL",
-            "ISCM",
-            "ICDS",
-            "ITKO",
-            "ILKL",
-            "IPPH",
-            "IGAR",
-            "IBLT",
-            "IRFD",
-            "IMLR",
-            "ITRC",
-            "IBTH",
-            "IUFO",
-            "ISAU",
-            "ISKP"
-        ]
+        self.airports = requests.get("https://justin681.com/digislip/airports.txt").text.split("\n")
         self.airports.sort()
 
         self.geometry(f"{self.width}x{self.height}") # Set the size of the window
