@@ -114,7 +114,7 @@ Python""".split("\n")
         self.title("DigiSlip") # Set the title of the window
         self.attributes('-topmost', True) # Set the window to be on top of all other windows, even when not focused, useful when quickly switching between windows
         self.resizable(False, False) # Disable resizing in the x and y direction
-        # self.iconbitmap("icon.ico") # Set the icon of the window
+        self.iconbitmap("icon.ico") # Set the icon of the window
 
         self.add_flight_button = customtkinter.CTkButton(self, text="Add Flight", command=self.add_flight) # Create a button
         self.add_flight_button.place(x=70, y=10) # Place the button on the window
@@ -131,7 +131,7 @@ Python""".split("\n")
         self.flights_frame = customtkinter.CTkScrollableFrame(self, width=self.width-40, height=self.height-70) # Create a scrollable frame
         self.flights_frame.place(x=10, y=50) # Place the scrollable frame on the window
 
-        self.flights = [] # Create a list to store all the flights
+        self.flights = {} # Create a list to store all the flights
 
     def add_flight(self):   
 
