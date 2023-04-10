@@ -131,7 +131,7 @@ Python""".split("\n")
         self.flights_frame = customtkinter.CTkScrollableFrame(self, width=self.width-40, height=self.height-70) # Create a scrollable frame
         self.flights_frame.place(x=10, y=50) # Place the scrollable frame on the window
 
-        self.flights = {} # Create a list to store all the flights
+        self.flights = [] # Create a list to store all the flights
 
     def add_flight(self):   
 
