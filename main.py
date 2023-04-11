@@ -2,6 +2,8 @@ import tkinter
 import customtkinter
 import webbrowser
 import requests
+import time
+import asyncio
 
 """
 DigiSlip
@@ -60,6 +62,17 @@ class App(customtkinter.CTk):
         self.show_chart_button = customtkinter.CTkButton(self, text="Show Chart", command=self.show_chart) # Create a button
         self.show_chart_button.place(x=330, y=10) # Place the button on the window
 
+        self.timer_active = False # Set the timer to be inactive by default
+
+        self.timer_minutes = customtkinter.CTkEntry(self, width=30) # Create an entry
+        self.timer_minutes.place(x=480, y=10) # Place the entry on the window
+
+        self.timer_seconds = customtkinter.CTkEntry(self, width=30) # Create an entry
+        self.timer_seconds.place(x=520, y=10) # Place the entry on the window
+
+        self.timer_button = customtkinter.CTkButton(self, text="Start", command=self.timer, width=100) # Create a button
+        self.timer_button.place(x=560, y=10) # Place the button on the window
+
         self.flights_frame = customtkinter.CTkScrollableFrame(self, width=self.width-40, height=self.height-70) # Create a scrollable frame
         self.flights_frame.place(x=10, y=50) # Place the scrollable frame on the window
 
@@ -91,6 +104,48 @@ class App(customtkinter.CTk):
         if airport in self.airports: # If the airport is in the list of airports
 
             webbrowser.open(f"https://ptfs.xyz/charts/dark/{airport} Ground Chart.png") # Open the airport chart in the default browser
+
+    def timer(self):
+
+        if self.timer_active:
+
+            self.timer_active = False
+
+            self.timer_button.configure(text="Start")
+
+        else:
+
+            self.timer_active = True
+
+            self.timer_button.configure(text="Stop")
+
+            if self.timer_minutes.get() == "":
+
+                self.timer_minutes.insert(0, "0")
+
+            if self.timer_seconds.get() == "":
+
+                self.timer_seconds.insert(0, "0")
+
+            time_left = int(self.timer_minutes.get()) * 60 + int(self.timer_seconds.get())
+
+            for i in range(time_left):
+
+                if not self.timer_active:
+
+                    break
+
+                time.sleep(1)
+
+                time_left -= 1
+
+                self.timer_minutes.delete(0, "end")
+                self.timer_minutes.insert(0, str(time_left // 60))
+
+                self.timer_seconds.delete(0, "end")
+                self.timer_seconds.insert(0, str(time_left % 60))
+
+                self.update()
     
 class Flight(customtkinter.CTkFrame):
 
@@ -136,7 +191,7 @@ class Flight(customtkinter.CTkFrame):
             
         self.flight_stage.grid(row=0, column=3, padx=5, pady=5) # Place the flight stage option menu on the frame
 
-        self.flight_stage_info = customtkinter.CTkEntry(self, width=100) # Create an entry box
+        self.flight_stage_info = customtkinter.CTkEntry(self, width=50) # Create an entry box
 
         if flight_stage_info != None: # If the flight stage info is not None
 
